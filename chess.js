@@ -269,8 +269,7 @@ const FLAGS = {
   QSIDE_CASTLE: 'q',
 }
 
-module.exports = {
-  SQUARES: (function () {
+const SQUARES = (function () {
   /* from the ECMA-262 spec (section 12.6.4):
    * "The mechanics of enumerating the properties ... is
    * implementation dependent"
@@ -286,8 +285,7 @@ module.exports = {
     keys.push(algebraic(i))
   }
   return keys
-})()};
-
+})();
 
 module.exports = { 
   Chess: function (fen) {

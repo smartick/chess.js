@@ -2028,7 +2028,7 @@ module.exports = {
     },
     // Incluye un movimiento ilegal en el history.
     smk_push_illegal_move_in_history: function(from, to, piece) {
-		let move = { color: this.turn(), from: SQUARES[from], to: SQUARES[to], flags: 'n', piece: piece.type/*, san: 'e4' */};
+		let move = { color: this.turn(), from: SQUARE_MAP[from], to: SQUARE_MAP[to], flags: 'n', piece: piece.type/*, san: 'e4' */};
 		// Falseamos el san por si hiciera falta.
 		/*
 		let san = move_to_san(move);

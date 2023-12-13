@@ -1329,6 +1329,13 @@ module.exports = {
     }
     move.flags = flags
 
+    // [SMK] Se incluye before y after con los FEN.
+    move.before = generate_fen();
+    // generate the FEN for the 'after' key
+    make_move(ugly_move)
+    move.after = generate_fen()
+    undo_move()
+
     return move
   }
 

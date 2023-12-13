@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.13.3.1] - 2023-12-13
+## [0.13.3] - 2023-12-13
 ### Updated
 - Tal y cómo se realiza en el original, se incluyen before y after con el fen en cada movimiento.
 

@@ -662,7 +662,7 @@ module.exports = {
   function generate_moves(options) {
     function add_move(board, moves, from, to, flags) {
     /* [SMK] Se incluye condición para cuando se realizan jugadas ilegales. */
-    	if (board[from]) { 
+      if (board[from]) { 
       /* if pawn promotion */
       if (
         board[from].type === PAWN &&
@@ -675,7 +675,7 @@ module.exports = {
       } else {
         moves.push(build_move(board, from, to, flags))
       }
-    	}
+      }
     }
 
     var moves = []
@@ -930,9 +930,9 @@ module.exports = {
 
   function king_attacked(color) {
 	  /* [SMK] Incluido por Smartick para permitir la NO existencia de un rey. */
-	  if (kings[color] == EMPTY) {
-		  return false;
-	  }
+    if (kings[color] == EMPTY) {
+      return false;
+    }
     return attacked(swap_color(color), kings[color])
   }
 
@@ -1086,10 +1086,10 @@ module.exports = {
 
       /* turn off castling */
       castling[us] = ''
-    	  
+
     /* [SMK] Permitimos jugada ilegal de captura de rey. */
     }  else if (ignoreCheck && move.captured === KING) {
-    	kings[swap_color(move.color)] = EMPTY;
+      kings[swap_color(move.color)] = EMPTY;
     }
 
     /* turn off castling if we move a rook */
@@ -2013,57 +2013,82 @@ module.exports = {
       })
     },
     
-    
     /**
      * [SMK] Smartick methods.
      */
+    smk_attacked: function(color, square) {
+      return attacked(color, SQUARE_MAP[square]);
+    },
+    smk_get_pieces: function(type, color) {
+      let pieces = [];
+      for (var i = SQUARE_MAP.a8; i <= SQUARE_MAP.h1; i++) {
+        /* did we run off the end of the board */
+        if (i & 0x88) {
+          i += 7
+          continue
+        }
+  
+        /* if empty square or wrong color or wrong type */
+        if (board[i] == null || board[i].color !== color || board[i].type !== type) continue;
+        let piece = board[i];
+        piece.square = algebraic(i);
+        pieces.push(piece);
+      }
+      return pieces;
+    },
+    smk_0x88ToAlgebraic: function(square0x88) {
+      return algebraic(square0x88);
+    },
+    smk_algebraicTo0x88: function(square) {
+      return SQUARE_MAP[square];
+    },
     // Devuelve si el rey de un color está siendo atacado.
     smk_king_attacked: function(color) {
-    	return king_attacked(color);
+      return king_attacked(color);
     },
     // Devuelve la posición de un rey de un color.
     smk_king_square: function(color) {
-    	return algebraic(kings[color]);
+      return algebraic(kings[color]);
     },
     // Devuelve el estado de los enroques.
     smk_castlings: function() {
-    	return castling;
+      return castling;
     },
     // Devuelve el estado de la captura al paso.
     smk_ep_square: function() {
-    	return ep_square;
+      return ep_square;
     },
     // Incluye un movimiento ilegal en el history.
     smk_push_illegal_move_in_history: function(from, to, piece) {
-		let move = { color: this.turn(), from: SQUARE_MAP[from], to: SQUARE_MAP[to], flags: 'n', piece: piece.type/*, san: 'e4' */};
-		// Falseamos el san por si hiciera falta.
-		/*
-		let san = move_to_san(move);
-		move['san'] = san;
-		*/
-		// Vacíamos los reyes e oncluimos en el history.
-		kings = { b: EMPTY, w: EMPTY };
-    	history.push({
-    	      move: move,
-    	      kings: kings,
-    	      turn: turn,
-    	      castling: { b: castling.b, w: castling.w },
-    	      ep_square: ep_square,
-    	      half_moves: half_moves,
-    	      move_number: move_number
-    	});
+      let move = { color: this.turn(), from: SQUARE_MAP[from], to: SQUARE_MAP[to], flags: 'n', piece: piece.type/*, san: 'e4' */};
+      // Falseamos el san por si hiciera falta.
+      /*
+      let san = move_to_san(move);
+      move['san'] = san;
+      */
+      // Vacíamos los reyes e oncluimos en el history.
+      kings = { b: EMPTY, w: EMPTY };
+      history.push({
+        move: move,
+        kings: kings,
+        turn: turn,
+        castling: { b: castling.b, w: castling.w },
+        ep_square: ep_square,
+        half_moves: half_moves,
+        move_number: move_number
+      });
     },
     // Limpia los movimientos del history.
     smk_clean_history: function() {
-    	history = [];
+      history = [];
     },
     // Ignora los jaques, útil cuando se permiten jugadas ilegales.
     smk_ignore_check: function() {
-    	ignoreCheck = true;
+      ignoreCheck = true;
     },
     // Obtiene el número de movimientos.
-    smk_move_number: function() {
-    	return move_number;
+    smk_move_number: function() { 
+      return move_number;
     }
   }
 }}
